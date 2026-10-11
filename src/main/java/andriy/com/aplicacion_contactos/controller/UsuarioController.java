@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/login")
-    public String mostrarLogin(Model model) {
+    public String mostrarLogin() {
         return "login";
     }
 

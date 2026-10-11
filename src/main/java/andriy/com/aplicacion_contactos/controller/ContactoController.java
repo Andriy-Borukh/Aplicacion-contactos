@@ -2,6 +2,7 @@ package andriy.com.aplicacion_contactos.controller;
 
 import andriy.com.aplicacion_contactos.dtos.ContactoRegistroDTO;
 import andriy.com.aplicacion_contactos.dtos.ContactoResponseDTO;
+import andriy.com.aplicacion_contactos.entities.Contacto;
 import andriy.com.aplicacion_contactos.entities.Usuario;
 import andriy.com.aplicacion_contactos.service.ContactoService;
 import andriy.com.aplicacion_contactos.service.UsuarioService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.HashSet;
 
 @Controller
 public class ContactoController {
@@ -46,7 +49,19 @@ public class ContactoController {
 
         model.addAttribute(
                 "contacto",
-                new ContactoRegistroDTO("", "", "", "")
+                new ContactoRegistroDTO(
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        null,
+                        false,
+                        new HashSet<>()
+                )
         );
 
         model.addAttribute("accion", "/contactos");
@@ -56,18 +71,21 @@ public class ContactoController {
 
     @PostMapping("/contactos")
     public String guardarContacto(
-            @Valid @ModelAttribute("contacto") ContactoRegistroDTO contacto,
+            @Valid @ModelAttribute("contacto") ContactoRegistroDTO dto,
             BindingResult result,
-            Authentication authentication
+            Authentication authentication,
+            Model model
     ) {
-
         if (result.hasErrors()) {
+            model.addAttribute("accion", "/contactos");
             return "contacto-form";
         }
 
-        Usuario usuario = usuarioService.obtenerPorEmail(authentication.getName());
+        Usuario usuario = usuarioService.obtenerPorEmail(
+                authentication.getName()
+        );
 
-        contactoService.guardarContacto(contacto, usuario);
+        contactoService.guardarContacto(dto, usuario);
 
         return "redirect:/contactos";
     }
@@ -88,7 +106,14 @@ public class ContactoController {
                         contacto.nombre(),
                         contacto.apellidos(),
                         contacto.telefono(),
-                        contacto.email()
+                        contacto.email(),
+                        contacto.empresa(),
+                        contacto.cargo(),
+                        contacto.notas(),
+                        contacto.direccion(),
+                        contacto.fechaCumpleanos(),
+                        contacto.favorito(),
+                        contacto.etiquetas()
                 )
         );
 
@@ -128,6 +153,11 @@ public class ContactoController {
         contactoService.eliminarContacto(id, usuario);
 
         return "redirect:/contactos";
+    }
+
+    @GetMapping("/prueba-api")
+    public String mostrarPruebaApi() {
+        return "prueba-api";
     }
 
 }

@@ -10,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,27 +23,47 @@ public class Contacto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
-    String nombre;
+    private String nombre;
 
     @NotBlank(message = "El apellido es obligatorio")
-    String apellidos;
+    private String apellidos;
 
     @NotBlank(message = "El telefono es obligatorio")
     @Pattern(
             regexp = "^\\+[1-9]\\d{1,14}$",
             message = "El telefono no es valido"
     )
-    String telefono;
+    private String telefono;
 
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "El email no es valido")
-    String email;
+    private String email;
+
+    private String empresa;
+
+    private String cargo;
+
+    private String notas;
+
+    private String direccion;
+
+    private LocalDate fechaCumple;
+
+    private Boolean favorito;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    Usuario usuario;
+    private Usuario usuario;
+
+    @ManyToMany
+    @JoinTable(
+            name = "contacto_etiqueta",
+            joinColumns = @JoinColumn(name = "contacto_id"),
+            inverseJoinColumns = @JoinColumn(name = "etiqueta_id")
+    )
+    private Set<Etiqueta> etiquetas = new HashSet<>();
 
 }

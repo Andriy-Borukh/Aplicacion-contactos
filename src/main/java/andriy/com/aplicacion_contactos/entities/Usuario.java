@@ -20,18 +20,18 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @NotBlank
-    String nombre;
+    private String nombre;
 
     @Column(unique = true, nullable = false)
-    String email;
+    private String email;
 
     @Column(nullable = false)
-    String password;
+    private String password;
 
-    LocalDate fechaRegistro;
+    private LocalDate fechaRegistro;
 
     @PrePersist
     public void prePersist() {
