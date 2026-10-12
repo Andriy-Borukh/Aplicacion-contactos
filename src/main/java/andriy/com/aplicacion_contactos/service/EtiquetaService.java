@@ -8,7 +8,6 @@ import andriy.com.aplicacion_contactos.entities.Usuario;
 import andriy.com.aplicacion_contactos.exceptions.RecursoNoEncontrado;
 import andriy.com.aplicacion_contactos.repositories.ContactoRepository;
 import andriy.com.aplicacion_contactos.repositories.EtiquetaRepository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class EtiquetaService {
         this.contactoRepository = contactoRepository;
     }
 
-    @Transactional
     public EtiquetaResponseDTO registrarEtiqueta(
             EtiquetaRegistroDTO dto,
             String emailUsuario
@@ -54,7 +52,6 @@ public class EtiquetaService {
 
     }
 
-    @Transactional(readOnly = true)
     public List<EtiquetaResponseDTO> listar(String emailUsuario) {
 
         Usuario usuario = usuarioService.obtenerPorEmail(emailUsuario);
@@ -65,7 +62,6 @@ public class EtiquetaService {
 
     }
 
-    @Transactional
     public void eliminar(Long id, String emailUsuario) {
         Usuario usuario = usuarioService.obtenerPorEmail(emailUsuario);
 
@@ -86,7 +82,6 @@ public class EtiquetaService {
 
     }
 
-    @Transactional(readOnly = true)
     public Set<Etiqueta> obtenerPorNombres(
             Set<String> nombres,
             Usuario usuario
@@ -125,6 +120,30 @@ public class EtiquetaService {
                         contacto.getEmpresa()
                 ))
                 .toList();
+    }
+
+    public Set<Etiqueta> obtenerOCrearPorNombres(
+            Set<String> nombres,
+            Usuario usuario
+    ) {
+        if (nombres == null || nombres.isEmpty()) {
+            return new java.util.HashSet<>();
+        }
+
+        return nombres.stream()
+                .filter(java.util.Objects::nonNull)
+                .map(String::trim)
+                .filter(nombre -> !nombre.isEmpty())
+                .distinct()
+                .map(nombre -> etiquetaRepository
+                        .findByUsuarioAndNombre(usuario, nombre)
+                        .orElseGet(() -> {
+                            Etiqueta etiqueta = new Etiqueta();
+                            etiqueta.setNombre(nombre);
+                            etiqueta.setUsuario(usuario);
+                            return etiquetaRepository.save(etiqueta);
+                        }))
+                .collect(Collectors.toSet());
     }
 
 }

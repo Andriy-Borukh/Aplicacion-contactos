@@ -14,11 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/etiquetas")
-public class EtiquetaControllerREST {
+public class EtiquetaController {
 
     private final EtiquetaService etiquetaService;
 
-    public EtiquetaControllerREST(EtiquetaService etiquetaService) {
+    public EtiquetaController(EtiquetaService etiquetaService) {
         this.etiquetaService = etiquetaService;
     }
 

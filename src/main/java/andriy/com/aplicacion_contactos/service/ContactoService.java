@@ -90,7 +90,7 @@ public class ContactoService {
         contacto.setFechaCumple(dto.fechaCumpleanos());
         contacto.setFavorito(dto.favorito());
 
-        Set<Etiqueta> etiquetas = etiquetaService.obtenerPorNombres(
+        Set<Etiqueta> etiquetas = etiquetaService.obtenerOCrearPorNombres(
                 dto.etiquetas(),
                 usuario
         );
@@ -147,7 +147,7 @@ public class ContactoService {
         contacto.setDireccion(dto.direccion());
         contacto.setFechaCumple(dto.fechaCumpleanos());
         contacto.setFavorito(dto.favorito());
-        Set<Etiqueta> etiquetas = etiquetaService.obtenerPorNombres(
+        Set<Etiqueta> etiquetas = etiquetaService.obtenerOCrearPorNombres(
                 dto.etiquetas(),
                 usuario
         );

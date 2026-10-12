@@ -15,12 +15,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contactos")
-public class ContactoControllerREST {
+public class ContactoController {
 
     private final ContactoService contactoService;
     private final UsuarioService usuarioService;
 
-    public ContactoControllerREST(
+    public ContactoController(
             ContactoService contactoService,
             UsuarioService usuarioService
     ) {
