@@ -1,155 +1,226 @@
-# Aplicación de Contactos
+# 📇 Aplicación Contactos
 
-Aplicación web sencilla para gestionar contactos personales.
+Aplicación web para gestionar contactos personales y profesionales, desarrollada con **Spring Boot** en el backend y **Vue 3 + Vuetify** en el frontend.
 
-El proyecto permite a los usuarios registrarse, iniciar sesión y gestionar sus propios contactos mediante las operaciones de crear, consultar, editar y eliminar.
+El proyecto permite registrar usuarios, iniciar sesión y gestionar contactos de forma segura, con funcionalidades de búsqueda, organización mediante etiquetas, favoritos e importación y exportación de datos.
 
-## Funcionalidades
+## ✨ Funcionalidades
 
-* Registro de usuarios.
-* Validación de los datos del registro.
+### 👤 Usuarios y autenticación
+
+* Registro de nuevos usuarios.
 * Inicio y cierre de sesión.
-* Contraseñas almacenadas de forma segura mediante BCrypt.
-* Gestión de contactos:
+* Autenticación mediante Spring Security.
+* Contraseñas protegidas mediante BCrypt.
+* Validación de datos en los formularios.
+* Cada usuario gestiona sus propios contactos y etiquetas.
 
-  * Crear contactos.
-  * Consultar contactos.
-  * Editar contactos.
-  * Eliminar contactos.
-* Cada usuario solo puede acceder a sus propios contactos.
-* Validación de los datos de los contactos.
-* Interfaz web sencilla utilizando Bootstrap.
+### 📇 Gestión de contactos
 
-## Tecnologías utilizadas
+* Crear, consultar, editar y eliminar contactos.
+* Guardar información personal y profesional:
 
-* Java 21
-* Spring Boot
-* Spring MVC
-* Spring Data JPA
-* Spring Security
-* Thymeleaf
-* Hibernate
-* H2 Database
-* Bean Validation
-* Lombok
-* Bootstrap 5
+  * Nombre y apellidos.
+  * Teléfono y correo electrónico.
+  * Empresa y cargo.
+  * Dirección y notas.
+  * Fecha de cumpleaños.
+  * Favoritos.
+  * Etiquetas personalizadas.
+* Asociar varios contactos a diferentes etiquetas.
+* Validar los datos antes de guardarlos.
 
-## Estructura del proyecto
+### 🏷️ Gestión de etiquetas
 
-El proyecto sigue una estructura basada en capas:
+* Crear y eliminar etiquetas.
+* Asociar etiquetas a los contactos.
+* Reutilizar etiquetas existentes.
+* Crear automáticamente las etiquetas que no existan durante la importación.
+* Filtrar y organizar los contactos mediante etiquetas.
+
+### 📊 Panel de control
+
+* Resumen de la información de los contactos.
+* Accesos rápidos a las principales funcionalidades.
+* Organización de la información para facilitar su consulta.
+
+### 📁 Importación y exportación
+
+* Exportar contactos en formato CSV.
+* Exportar contactos en formato JSON.
+* Importar contactos desde archivos CSV y JSON.
+* Validar los registros importados.
+* Mostrar un resumen de los contactos importados y los errores encontrados.
+
+### 🎨 Interfaz
+
+* Interfaz desarrollada con Vue 3 y Vuetify.
+* Diseño adaptable a diferentes tamaños de pantalla.
+* Componentes reutilizables.
+* Formularios con validación y mensajes de error.
+* Navegación mediante Vue Router.
+* Comunicación con el backend mediante peticiones HTTP.
+
+## 🛠️ Tecnologías utilizadas
+
+| Tecnología         | Uso                                   |
+| ------------------ | ------------------------------------- |
+| Java 21            | Lenguaje del backend                  |
+| Spring Boot        | Desarrollo de la aplicación backend   |
+| Spring Web MVC     | Controladores y API REST              |
+| Spring Data JPA    | Persistencia y acceso a datos         |
+| Spring Security    | Autenticación y autorización          |
+| Jakarta Validation | Validación de datos                   |
+| Hibernate          | Mapeo objeto-relacional               |
+| H2 Database        | Base de datos durante el desarrollo   |
+| Gradle             | Gestión de dependencias y compilación |
+| Vue 3              | Desarrollo del frontend               |
+| Vuetify            | Componentes visuales                  |
+| Vue Router         | Navegación entre vistas               |
+| JavaScript         | Lógica del frontend                   |
+| Git y GitHub       | Control de versiones                  |
+
+## 📋 Requisitos previos
+
+Antes de ejecutar el proyecto, necesitas:
+
+* Java Development Kit (JDK) 21.
+* Node.js y npm.
+* Git, si deseas clonar el repositorio.
+* Un IDE como IntelliJ IDEA o Visual Studio Code.
+
+## 🚀 Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone URL_DEL_REPOSITORIO
+cd "Aplicacion Contactos"
+```
+
+Sustituye `URL_DEL_REPOSITORIO` por la URL real de tu repositorio de GitHub.
+
+### 2. Ejecutar el backend
+
+Desde la carpeta raíz del backend, ejecuta:
+
+**Windows:**
+
+```powershell
+.\gradlew.bat bootRun
+```
+
+**Linux o macOS:**
+
+```bash
+./gradlew bootRun
+```
+
+El backend utiliza el puerto `9090` en la configuración de desarrollo.
+
+### 3. Ejecutar el frontend
+
+Abre otra terminal y entra en la carpeta del frontend, donde se encuentra `package.json`.
+
+Instala las dependencias:
+
+```bash
+npm install
+```
+
+Inicia el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+Vite mostrará en la terminal la dirección local desde la que acceder a la aplicación, normalmente `http://localhost:5173`.
+
+> **Nota:** la configuración del proxy de Vite debe dirigir las peticiones `/api` al backend de Spring Boot. Comprueba también que las rutas y los puertos coincidan con la configuración de tu proyecto.
+
+## 🔌 API REST
+
+Los principales endpoints del backend se organizan bajo `/api`.
+
+| Método | Endpoint                       | Descripción                               |
+| ------ | ------------------------------ | ----------------------------------------- |
+| GET    | `/api/usuarios/me`             | Obtener los datos del usuario autenticado |
+| GET    | `/api/contactos`               | Listar contactos del usuario              |
+| GET    | `/api/contactos/{id}`          | Obtener un contacto                       |
+| POST   | `/api/contactos`               | Crear un contacto                         |
+| PUT    | `/api/contactos/{id}`          | Editar un contacto                        |
+| DELETE | `/api/contactos/{id}`          | Eliminar un contacto                      |
+| GET    | `/api/contactos/exportar/csv`  | Exportar contactos a CSV                  |
+| GET    | `/api/contactos/exportar/json` | Exportar contactos a JSON                 |
+| POST   | `/api/contactos/importar`      | Importar contactos desde un archivo       |
+| GET    | `/api/etiquetas`               | Listar etiquetas                          |
+
+Las operaciones protegidas requieren una sesión autenticada. Las peticiones que modifican datos también deben respetar la protección CSRF configurada en Spring Security.
+
+## 🗂️ Estructura del proyecto
+
+### Backend
+
+El backend sigue una organización por responsabilidades:
+
+```text
+src/main/java/andriy/com/aplicacion_contactos/
+├── controller/
+├── dtos/
+├── entities/
+├── exceptions/
+├── repositories/
+└── service/
+```
+
+* **controller:** recibe las peticiones HTTP y devuelve las respuestas.
+* **dtos:** define los objetos utilizados para recibir y devolver datos.
+* **entities:** contiene las entidades persistentes.
+* **exceptions:** gestiona las excepciones de la aplicación.
+* **repositories:** proporciona el acceso a la base de datos.
+* **service:** implementa la lógica de negocio.
+
+### Frontend
 
 ```text
 src/
-└── main/
-    ├── java/
-    │   └── andriy/com/aplicacion_contactos/
-    │       ├── controller/
-    │       ├── dtos/
-    │       ├── entities/
-    │       ├── repositories/
-    │       ├── security/
-    │       └── service/
-    │
-    └── resources/
-        ├── templates/
-        └── application.properties
+├── components/
+├── services/
+├── views/
+├── router/
+├── App.vue
+└── main.js
 ```
 
-### Capas principales
+* **components:** componentes reutilizables de la interfaz.
+* **services:** comunicación con la API REST.
+* **views:** vistas principales de la aplicación.
+* **router:** configuración de las rutas.
+* **App.vue:** estructura principal de la interfaz.
+* **main.js:** punto de entrada de Vue.
 
-**Controller**
+La estructura exacta puede variar según la organización final del código.
 
-Gestiona las peticiones HTTP y las vistas de la aplicación.
+## 🔐 Seguridad
 
-**Service**
+La aplicación incorpora varias medidas de seguridad:
 
-Contiene la lógica de negocio.
+* Autenticación y autorización mediante Spring Security.
+* Almacenamiento de contraseñas mediante BCrypt.
+* Validación de datos recibidos por el backend.
+* Protección CSRF para las operaciones que modifican información.
+* Restricción del acceso a los contactos y etiquetas de cada usuario.
 
-**Repository**
+## 🗄️ Base de datos
 
-Se encarga del acceso a la base de datos mediante Spring Data JPA.
+Durante el desarrollo se utiliza H2 Database.
 
-**Entity**
+La configuración de desarrollo puede utilizar una base de datos en memoria, por lo que los datos podrían perderse al reiniciar la aplicación. Si se utiliza una configuración persistente en archivo, deben revisarse las propiedades correspondientes.
 
-Representa las entidades almacenadas en la base de datos.
+No se deben incluir credenciales reales ni secretos en el repositorio.
 
-**DTO**
+## 👨‍💻 Autor
 
-Se utilizan para transportar los datos entre las diferentes capas de la aplicación.
+Proyecto personal desarrollado como parte del aprendizaje de desarrollo de aplicaciones web y multiplataforma.
 
-**Security**
-
-Contiene la configuración de Spring Security y la autenticación de los usuarios.
-
-## Base de datos
-
-El proyecto utiliza H2 como base de datos.
-
-La configuración actual utiliza una base de datos en memoria:
-
-```text
-jdbc:h2:mem:aplicacion_contactos
-```
-
-Esto significa que los datos se eliminan al reiniciar la aplicación.
-
-La consola de H2 está disponible en:
-
-```text
-http://localhost:9090/h2-console
-```
-
-## Ejecución
-
-### Requisitos
-
-* Java 21
-* Gradle
-
-### Pasos
-
-1. Clonar o descargar el proyecto.
-2. Abrirlo con IntelliJ IDEA, Eclipse u otro IDE compatible.
-3. Ejecutar la aplicación Spring Boot.
-4. Abrir el navegador y acceder a:
-
-```text
-http://localhost:9090/login
-```
-
-También se puede acceder al registro desde:
-
-```text
-http://localhost:9090/registro
-```
-
-## Autenticación
-
-La aplicación utiliza Spring Security para gestionar la autenticación.
-
-Los usuarios inician sesión utilizando su email y contraseña.
-
-Las contraseñas no se almacenan directamente en la base de datos, sino que se almacenan utilizando BCrypt.
-
-Además, las operaciones relacionadas con los contactos requieren que el usuario esté autenticado.
-
-## Gestión de contactos
-
-Cada contacto está asociado a un usuario.
-
-Por este motivo, las operaciones de consulta, edición y eliminación comprueban que el contacto pertenece al usuario que ha iniciado sesión.
-
-De esta forma, un usuario no puede acceder ni modificar los contactos de otro usuario.
-
-## Objetivo del proyecto
-
-El objetivo del proyecto es poner en práctica diferentes conceptos de desarrollo de aplicaciones web con Java y Spring Boot, especialmente:
-
-* Arquitectura por capas.
-* Spring MVC.
-* Persistencia con JPA.
-* Validación de datos.
-* Autenticación y autorización.
-* Uso de DTOs.
-* Desarrollo de vistas con Thymeleaf.
-* Gestión de bases de datos con H2.
+**Tecnologías principales:** Java, Spring Boot, Spring Security, JPA, Vue 3 y Vuetify.
