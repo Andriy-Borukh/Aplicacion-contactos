@@ -156,3 +156,40 @@ export async function eliminarContacto(id) {
     method: 'DELETE',
   })
 }
+
+
+export async function obtenerEtiquetas() {
+  return peticion(`${API_URL}/etiquetas`)
+}
+
+export async function crearEtiqueta(etiqueta) {
+  return peticion(`${API_URL}/etiquetas`, {
+    method: 'POST',
+    body: JSON.stringify(etiqueta),
+  })
+}
+
+export async function eliminarEtiqueta(id) {
+  return peticion(`${API_URL}/etiquetas/${id}`, {
+    method: 'DELETE',
+  })
+}
+
+export function obtenerContactosAsociadosEtiqueta(id) {
+  return peticion(`/api/etiquetas/${id}/contactos`)
+}
+
+
+export async function cerrarSesion() {
+  return peticion('/api/usuarios/logout', {
+    method: 'POST',
+  })
+}
+
+
+export async function registrarUsuario(usuario) {
+  return peticion(`${API_URL}/usuarios`, {
+    method: 'POST',
+    body: JSON.stringify(usuario),
+  })
+}

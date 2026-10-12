@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import {
   obtenerUsuarioActual,
   obtenerContactos,
-} from '../services/api.js'
+} from '@/services/api.js'
 
 export function useDatosContactos() {
   const usuario = ref(null)

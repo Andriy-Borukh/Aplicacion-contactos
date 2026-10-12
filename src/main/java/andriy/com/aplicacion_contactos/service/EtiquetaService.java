@@ -1,10 +1,12 @@
 package andriy.com.aplicacion_contactos.service;
 
+import andriy.com.aplicacion_contactos.dtos.ContactoEtiquetaDTO;
 import andriy.com.aplicacion_contactos.dtos.EtiquetaRegistroDTO;
 import andriy.com.aplicacion_contactos.dtos.EtiquetaResponseDTO;
 import andriy.com.aplicacion_contactos.entities.Etiqueta;
 import andriy.com.aplicacion_contactos.entities.Usuario;
 import andriy.com.aplicacion_contactos.exceptions.RecursoNoEncontrado;
+import andriy.com.aplicacion_contactos.repositories.ContactoRepository;
 import andriy.com.aplicacion_contactos.repositories.EtiquetaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,14 @@ public class EtiquetaService {
 
     private final EtiquetaRepository etiquetaRepository;
     private final UsuarioService usuarioService;
+    private final ContactoRepository contactoRepository;
 
     public EtiquetaService(EtiquetaRepository etiquetaRepository,
-                           UsuarioService usuarioService) {
+                           UsuarioService usuarioService,
+                           ContactoRepository contactoRepository) {
         this.etiquetaRepository = etiquetaRepository;
         this.usuarioService = usuarioService;
+        this.contactoRepository = contactoRepository;
     }
 
     @Transactional
@@ -60,19 +65,19 @@ public class EtiquetaService {
 
     }
 
-    @Transactional public void eliminar(
-            Long id,
-            String emailUsuario)
-    {
+    @Transactional
+    public void eliminar(Long id, String emailUsuario) {
         Usuario usuario = usuarioService.obtenerPorEmail(emailUsuario);
+
         Etiqueta etiqueta = etiquetaRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontrado( "No se ha encontrado la etiqueta" ));
-        if (!etiqueta.getUsuario().getId().equals(usuario.getId())) {
-            throw new RecursoNoEncontrado( "No se ha encontrado la etiqueta" );
-        }
+                .filter(e -> e.getUsuario().getId().equals(usuario.getId()))
+                .orElseThrow(() ->
+                        new RecursoNoEncontrado("No se ha encontrado la etiqueta")
+                );
+
+        contactoRepository.eliminarAsociacionesEtiqueta(etiqueta.getId());
 
         etiquetaRepository.delete(etiqueta);
-
     }
 
     private EtiquetaResponseDTO convertirDTO(Etiqueta etiqueta) {
@@ -96,6 +101,30 @@ public class EtiquetaService {
                                 "No existe la etiqueta: " + nombre
                         )))
                 .collect(Collectors.toSet());
+    }
+
+    public List<ContactoEtiquetaDTO> obtenerContactosAsociados(
+            Long etiquetaId,
+            String emailUsuario
+    ) {
+        Usuario usuario = usuarioService.obtenerPorEmail(emailUsuario);
+
+        Etiqueta etiqueta = etiquetaRepository.findById(etiquetaId)
+                .filter(e -> e.getUsuario().getId().equals(usuario.getId()))
+                .orElseThrow(() ->
+                        new RecursoNoEncontrado("No se ha encontrado la etiqueta")
+                );
+
+        return contactoRepository
+                .findByUsuarioAndEtiquetas_Id(usuario, etiqueta.getId())
+                .stream()
+                .map(contacto -> new ContactoEtiquetaDTO(
+                        contacto.getId(),
+                        contacto.getNombre(),
+                        contacto.getApellidos(),
+                        contacto.getEmpresa()
+                ))
+                .toList();
     }
 
 }

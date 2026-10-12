@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import {
   crearContacto,
   editarContacto,
-} from '../services/api.js'
+} from '@/services/api.js'
 
 export function useFormularioContactos({
   contactoVacio,

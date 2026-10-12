@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import {
   eliminarContacto,
   editarContacto,
-} from '../services/api.js'
+} from '@/services/api.js'
 
 export function useAccionesContactos({
   cargarContactos,

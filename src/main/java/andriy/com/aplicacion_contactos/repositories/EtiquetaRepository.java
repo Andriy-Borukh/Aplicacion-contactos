@@ -9,13 +9,9 @@ import java.util.Optional;
 
 public interface EtiquetaRepository extends JpaRepository<Etiqueta, Long> {
 
-    Optional<Etiqueta> findByNombre(String nombre);
-
     List<Etiqueta> findByUsuario(Usuario usuario);
 
     Optional<Etiqueta> findByUsuarioAndNombre(Usuario usuario, String nombre);
-
-    boolean existsByNombre(String nombre);
 
     boolean existsByUsuarioAndNombre(Usuario usuario, String nombre);
 

@@ -48,8 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/login",
                                 "/registro",
-                                "/h2-console/**",
-                                "/prueba-api"
+                                "/h2-console/**"
                         ).permitAll()
                         .requestMatchers(
                                 org.springframework.http.HttpMethod.POST,

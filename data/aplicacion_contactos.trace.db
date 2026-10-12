@@ -1,0 +1,4 @@
+2026-10-12 15:31:44.610997+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "USUARIOS" no encontrada
+Table "USUARIOS" not found; SQL statement:
+SELECT * FROM USUARIOS [42102-240]

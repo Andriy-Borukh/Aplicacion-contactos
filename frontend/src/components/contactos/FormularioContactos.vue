@@ -101,6 +101,24 @@
             </v-col>
 
             <v-col cols="12">
+              <v-select
+                v-model="formularioContacto.etiquetas"
+                :items="etiquetasDisponibles"
+                item-title="nombre"
+                item-value="nombre"
+                label="Etiquetas"
+                placeholder="Selecciona una o varias etiquetas"
+                prepend-inner-icon="mdi-tag-multiple-outline"
+                variant="outlined"
+                multiple
+                chips
+                closable-chips
+                clearable
+                :loading="cargandoEtiquetas"
+              />
+            </v-col>
+
+            <v-col cols="12">
               <v-checkbox
                 v-model="formularioContacto.favorito"
                 label="Marcar como favorito"
@@ -150,6 +168,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { obtenerEtiquetas } from '@/services/api.js'
 
 const props = defineProps({
   modelValue: {
@@ -216,4 +235,29 @@ async function guardar() {
 
   emit('guardar', { ...formularioContacto.value })
 }
+
+const etiquetasDisponibles = ref([])
+const cargandoEtiquetas = ref(false)
+
+async function cargarEtiquetas() {
+  cargandoEtiquetas.value = true
+
+  try {
+    etiquetasDisponibles.value = await obtenerEtiquetas()
+  } catch (error) {
+    console.error('No se han podido cargar las etiquetas:', error)
+  } finally {
+    cargandoEtiquetas.value = false
+  }
+}
+
+watch(
+  () => props.modelValue,
+  (abierto) => {
+    if (abierto) {
+      cargarEtiquetas()
+    }
+  }
+)
+
 </script>

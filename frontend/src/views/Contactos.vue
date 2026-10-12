@@ -1,5 +1,5 @@
  <template>
-  <v-container class="py-8">
+  <v-container class="contactos-page py-4">
 
     <CabeceraContactos
   :usuario="usuario"
@@ -15,7 +15,11 @@
 
 <EstadisticasContactos :contactos="contactos" />
 
-<v-card rounded="lg" elevation="2">
+<v-card
+  class="contactos-card"
+  rounded="lg"
+  elevation="2"
+>
   <v-progress-linear
     v-if="cargando"
     indeterminate
@@ -40,19 +44,24 @@
     contactosFiltrados.length > 0 &&
     vistaActual === 'tabla'
   "
+  class="contactos-tabla-scroll"
   :contactos="contactosFiltrados"
   @cambiar-favorito="cambiarFavorito"
   @editar="abrirFormulario"
   @eliminar="confirmarEliminacion"
 />
 
-<TarjetasContactos
-  v-if="vistaActual === 'tarjetas' && contactosFiltrados.length > 0"
-  :contactos="contactosFiltrados"
-  @cambiar-favorito="cambiarFavorito"
-  @editar="abrirFormulario"
-  @eliminar="confirmarEliminacion"
-/>
+  <div
+    v-if="vistaActual === 'tarjetas' && contactosFiltrados.length > 0"
+    class="contactos-tarjetas-scroll"
+  >
+    <TarjetasContactos
+      :contactos="contactosFiltrados"
+      @cambiar-favorito="cambiarFavorito"
+      @editar="abrirFormulario"
+      @eliminar="confirmarEliminacion"
+    />
+  </div>
 
   <v-card-text
   v-else-if="!cargando && contactos.length === 0"
@@ -108,19 +117,19 @@
 
 <script setup>
 import { onMounted, ref} from 'vue'
-import EstadisticasContactos from '../components/contactos/EstadisticasContactos.vue'
-import FiltrosContactos from '../components/contactos/FiltrosContactos.vue'
-import TablaContactos from '../components/contactos/TablaContactos.vue'
-import TarjetasContactos from '../components/contactos/TarjetasContactos.vue'
-import FormularioContactos from '../components/contactos/FormularioContactos.vue'
-import ConfirmarEliminacion from '../components/contactos/ConfirmarEliminacion.vue'
-import CabeceraContactos from '../components/contactos/CabeceraContactos.vue'
-import AlertaError from '../components/AlertaError.vue'
-import AlertaExito from '../components/AlertaExito.vue'
-import { useContactos } from '../composables/useContacto.js'
-import { useDatosContactos } from '../composables/useDatsoContactos.js'
-import { useFormularioContactos } from '../composables/useFormularioContactos.js'
-import { useAccionesContactos } from '../composables/useAccionesContactos.js'
+import EstadisticasContactos from '@/components/contactos/EstadisticasContactos.vue'
+import FiltrosContactos from '@/components/contactos/FiltrosContactos.vue'
+import TablaContactos from '@/components/contactos/TablaContactos.vue'
+import TarjetasContactos from '@/components/contactos/TarjetasContactos.vue'
+import FormularioContactos from '@/components/contactos/FormularioContactos.vue'
+import ConfirmarEliminacion from '@/components/contactos/ConfirmarEliminacion.vue'
+import CabeceraContactos from '@/components/contactos/CabeceraContactos.vue'
+import AlertaError from '@/components/AlertaError.vue'
+import AlertaExito from '@/components/AlertaExito.vue'
+import { useContactos } from '@/composables/useContacto.js'
+import { useDatosContactos } from '@/composables/useDatosContactos.js'
+import { useFormularioContactos } from '@/composables/useFormularioContactos.js'
+import { useAccionesContactos } from '@/composables/useAccionesContactos.js'
 
 const {
   usuario,
@@ -210,3 +219,37 @@ async function guardarContactoConMensaje(datosFormulario) {
   }
 }
 </script>
+
+<style scoped>
+.contactos-page {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.contactos-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.contactos-card > .v-card-text {
+  flex-shrink: 0;
+}
+
+.contactos-tabla-scroll {
+  display: block;
+  min-height: 250px;
+  overflow-y: auto;
+}
+
+.contactos-tarjetas-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+</style>

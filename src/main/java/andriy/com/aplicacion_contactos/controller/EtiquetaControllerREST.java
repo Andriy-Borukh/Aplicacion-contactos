@@ -1,5 +1,6 @@
 package andriy.com.aplicacion_contactos.controller;
 
+import andriy.com.aplicacion_contactos.dtos.ContactoEtiquetaDTO;
 import andriy.com.aplicacion_contactos.dtos.EtiquetaRegistroDTO;
 import andriy.com.aplicacion_contactos.dtos.EtiquetaResponseDTO;
 import andriy.com.aplicacion_contactos.service.EtiquetaService;
@@ -27,6 +28,19 @@ public class EtiquetaControllerREST {
     ) {
         return ResponseEntity.ok(
                 etiquetaService.listar(authentication.getName())
+        );
+    }
+
+    @GetMapping("/{id}/contactos")
+    public ResponseEntity<List<ContactoEtiquetaDTO>> listarContactosAsociados(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(
+                etiquetaService.obtenerContactosAsociados(
+                        id,
+                        authentication.getName()
+                )
         );
     }
 
