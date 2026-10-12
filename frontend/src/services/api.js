@@ -14,8 +14,12 @@ const cabeceras = {
 ...opciones.headers,
 }
 
-if (opciones.body && !cabeceras['Content-Type']) {
-cabeceras['Content-Type'] = 'application/json'
+if (
+  opciones.body &&
+  !(opciones.body instanceof FormData) &&
+  !cabeceras['Content-Type']
+) {
+  cabeceras['Content-Type'] = 'application/json'
 }
 
 if (!['GET', 'HEAD', 'OPTIONS'].includes(metodo)) {
