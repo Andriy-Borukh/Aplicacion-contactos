@@ -87,13 +87,24 @@ const contactosRecientes = computed(() =>
 function diasHastaCumpleanos(fecha) {
   if (!fecha) return null
 
-  const [, mes, dia] = fecha.split('-').map(Number)
+  const coincidencia = String(fecha).match(/^(\d{4})-(\d{2})-(\d{2})/)
+
+  if (!coincidencia) return null
+
+  const mes = Number(coincidencia[2])
+  const dia = Number(coincidencia[3])
 
   const hoy = new Date()
   hoy.setHours(0, 0, 0, 0)
 
   let proximo = new Date(hoy.getFullYear(), mes - 1, dia)
-  proximo.setHours(0, 0, 0, 0)
+
+  if (
+    proximo.getMonth() !== mes - 1 ||
+    proximo.getDate() !== dia
+  ) {
+    return null
+  }
 
   if (proximo < hoy) {
     proximo = new Date(hoy.getFullYear() + 1, mes - 1, dia)
@@ -116,6 +127,16 @@ const proximosCumpleanos = computed(() =>
         diasHastaCumpleanos(b.fechaCumpleanos),
     ),
 )
+
+onMounted(() => {
+  console.log(
+      'Fechas de cumpleaños:',
+      contactos.value.map(contacto => ({
+        nombre: contacto.nombre,
+        fechaCumpleanos: contacto.fechaCumpleanos,
+      })),
+  )
+})
 
 onMounted(cargarContactos)
 </script>

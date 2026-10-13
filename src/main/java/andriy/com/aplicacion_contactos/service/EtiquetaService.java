@@ -8,6 +8,7 @@ import andriy.com.aplicacion_contactos.entities.Usuario;
 import andriy.com.aplicacion_contactos.exceptions.RecursoNoEncontrado;
 import andriy.com.aplicacion_contactos.repositories.ContactoRepository;
 import andriy.com.aplicacion_contactos.repositories.EtiquetaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class EtiquetaService {
 
     }
 
+    @Transactional
     public void eliminar(Long id, String emailUsuario) {
         Usuario usuario = usuarioService.obtenerPorEmail(emailUsuario);
 
@@ -80,22 +82,6 @@ public class EtiquetaService {
 
         return new EtiquetaResponseDTO(etiqueta.getId(), etiqueta.getNombre());
 
-    }
-
-    public Set<Etiqueta> obtenerPorNombres(
-            Set<String> nombres,
-            Usuario usuario
-    ) {
-        return nombres.stream()
-                .map(String::trim)
-                .filter(nombre -> !nombre.isEmpty())
-                .distinct()
-                .map(nombre -> etiquetaRepository
-                        .findByUsuarioAndNombre(usuario, nombre)
-                        .orElseThrow(() -> new IllegalArgumentException(
-                                "No existe la etiqueta: " + nombre
-                        )))
-                .collect(Collectors.toSet());
     }
 
     public List<ContactoEtiquetaDTO> obtenerContactosAsociados(

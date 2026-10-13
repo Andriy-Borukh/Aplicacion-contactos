@@ -1,4 +1,3 @@
-
 <template>
   <v-card rounded="lg" class="mb-6">
     <v-card-title class="pa-5">
@@ -6,20 +5,20 @@
     </v-card-title>
 
     <v-card-text>
-      <v-form @submit.prevent="emit('crear')">
+      <v-form ref="formulario" @submit.prevent="crear">
         <v-row align="start">
           <v-col cols="12" sm="8">
             <v-text-field
-              :model-value="nombre"
-              @update:model-value="emit('update:nombre', $event)"
-              label="Nombre de la etiqueta"
-              placeholder="Ej. Trabajo, Amigos, Familia..."
-              variant="outlined"
-              prepend-inner-icon="mdi-tag-outline"
-              maxlength="50"
-              counter="50"
-              :disabled="guardando"
-              :rules="[
+                :model-value="nombre"
+                @update:model-value="emit('update:nombre', $event)"
+                label="Nombre de la etiqueta"
+                placeholder="Ej. Trabajo, Amigos, Familia..."
+                variant="outlined"
+                prepend-inner-icon="mdi-tag-outline"
+                maxlength="50"
+                counter="50"
+                :disabled="guardando"
+                :rules="[
                 v => !!v?.trim() || 'El nombre es obligatorio'
               ]"
             />
@@ -27,13 +26,13 @@
 
           <v-col cols="12" sm="4">
             <v-btn
-              type="submit"
-              color="primary"
-              prepend-icon="mdi-plus"
-              block
-              size="large"
-              :loading="guardando"
-              :disabled="!nombre.trim() || guardando"
+                type="submit"
+                color="primary"
+                prepend-icon="mdi-plus"
+                block
+                size="large"
+                :loading="guardando"
+                :disabled="!nombre.trim() || guardando"
             >
               Crear etiqueta
             </v-btn>
@@ -45,6 +44,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 defineProps({
   nombre: {
     type: String,
@@ -57,4 +58,22 @@ defineProps({
 })
 
 const emit = defineEmits(['update:nombre', 'crear'])
+
+const formulario = ref(null)
+
+async function crear() {
+  const resultado = await formulario.value?.validate()
+
+  if (!resultado?.valid) return
+
+  emit('crear')
+}
+
+async function limpiarValidacion() {
+  await formulario.value?.resetValidation()
+}
+
+defineExpose({
+  limpiarValidacion,
+})
 </script>

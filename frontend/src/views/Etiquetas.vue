@@ -6,7 +6,7 @@
 
     <AlertaExito v-model="mostrarAlertaExito" :mensaje="mensajeExito" />
 
-    <FormularioEtiquetas
+    <FormularioEtiquetas ref="formularioEtiquetas"
      v-model:nombre="nuevoNombre"
      :guardando="guardando"
      @crear="crear"
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import {
   obtenerEtiquetas,
   crearEtiqueta as crearEtiquetaAPI,
@@ -59,6 +59,8 @@ const dialogoEliminar = ref(false)
 const etiquetaAEliminar = ref(null)
 const contactosAsociados = ref([])
 const cargandoContactos = ref(false)
+
+const formularioEtiquetas = ref(null)
 
 async function cargarEtiquetas() {
   cargando.value = true
@@ -89,6 +91,8 @@ async function crear() {
       a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })
     )
     nuevoNombre.value = ''
+    await nextTick()
+    await formularioEtiquetas.value?.limpiarValidacion()
     mensajeExito.value = 'Etiqueta creada correctamente'
     mostrarAlertaExito.value = true
   } catch (e) {
@@ -147,24 +151,10 @@ onMounted(cargarEtiquetas)
 <style scoped>
 
 .etiquetas-page {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.etiquetas-card {
-  display: flex;
-  flex-direction: column;
-  min-height: 400px;
-  overflow: hidden;
-}
-
-.etiquetas-tabla-scroll {
-  display: block;
-  min-height: 250px;
-  overflow-y: auto;
+  min-width: 0;
 }
 
 </style>
